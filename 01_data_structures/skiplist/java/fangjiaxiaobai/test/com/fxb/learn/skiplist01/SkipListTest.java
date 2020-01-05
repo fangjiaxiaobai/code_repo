@@ -33,13 +33,13 @@ public class SkipListTest {
     private static void testDelete() {
         SkipList<Integer, String> skipList = new SkipList<>();
         Random random = new Random();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             int n = random.nextInt(10);
             skipList.insert(n, "" + n);
         }
 
         skipList.show();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             int key = random.nextInt(10);
             String delete = skipList.delete(key);
             System.out.println("要删除的key:" + key + ", 删除结果:" + delete);

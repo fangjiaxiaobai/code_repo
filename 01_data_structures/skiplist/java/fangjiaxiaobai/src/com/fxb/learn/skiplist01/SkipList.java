@@ -4,6 +4,12 @@ import java.util.Random;
 
 /**
  * 跳表
+ *
+ * 初学者建议去如下版本学习.
+ *
+ * git checkout `70ef2f5`
+ *
+ *
  * 1. 排序的顺序.
  * 目前只能是从小到大排序。
  * 2. 跳表的层数和数据量的最优解。
@@ -61,23 +67,14 @@ public class SkipList<K extends Comparable<K>, V> {
      * @return 是否插入成功
      */
     public boolean insert(K key, V value) {
-        /// one. 找到带插入位置
-        /// 如果 key 相等, 则更新值.
-        /// 如果遇到大于key的Node, 找到前一个元素,进行插入.
-        Node<K, V> q = null, p = this.head;
-
         /// 生成一个新节点的层.
         int newNodeLevel = randLevel();
 
         /// 带插入节点的每一层的前继节点
         Node<K, V>[] previousNodes = new Node[this.maxLevel];
-        int level = this.maxLevel - 1;
-        for (; level >= 0; level--) {
-            while (null != (q = p.next[level]) && q.compareKey(key) < 0) {
-                p = q;
-            }
-            previousNodes[level] = p;
-        }
+
+        // one. 查询前继节点和目标节点
+        Node<K, V> q = genericSearch(key, previousNodes);
 
         /// key 相等, 更新value, 直接返回。
         if (null != q && q.compareKey(key) == 0) {
@@ -113,31 +110,22 @@ public class SkipList<K extends Comparable<K>, V> {
      */
     public V delete(K key) {
 
-        Node<K, V> q = null, p = this.head;
         Node<K, V>[] previousNodes = new Node[this.maxLevel];
-        for (int level = this.maxLevel - 1; level >= 0; level--) {
-            while (null != (q = p.next[level]) && q.compareKey(key) < 0) {
-                p = q;
-            }
-            previousNodes[level] = p;
-        }
+        Node<K, V> kvNode = genericSearch(key, previousNodes);
 
-        if (null == q || q.compareKey(key) > 0) {
+        if(kvNode == null){
             return null;
         }
-
-        V value = q.value;
-
         for (int i = previousNodes.length - 1; i >= 0; i--) {
-            if (q == previousNodes[i].next[i]) {
-                previousNodes[i].next[i] = q.next[i];
+            if (kvNode == previousNodes[i].next[i]) {
+                previousNodes[i].next[i] = kvNode.next[i];
                 if (this.head.next[i] == null) {
                     this.maxLevel--;
                 }
             }
         }
 
-        return value;
+        return kvNode.value;
     }
 
     /**
@@ -147,8 +135,23 @@ public class SkipList<K extends Comparable<K>, V> {
      * @return 存在, 返回value，不存在,返回null。
      */
     public V search(K key) {
+        Node<K, V> kvNode = genericSearch(key, null);
+        return null == kvNode ? null : kvNode.value;
+    }
+
+    /**
+     * 通用的查询实现
+     *
+     * @param key           Key
+     * @param previousNodes 前继节点
+     * @return 存在返回Node，不存在返回Null
+     */
+    private Node<K, V> genericSearch(K key, Node<K, V>[] previousNodes) {
         Node<K, V> q = null, p = this.head;
-        Node<K, V>[] previousNodes = new Node[this.maxLevel];
+        if (null == previousNodes) {
+            previousNodes = new Node[this.maxLevel];
+        }
+
         for (int level = this.maxLevel - 1; level >= 0; level--) {
             while (null != (q = p.next[level]) && q.compareKey(key) < 0) {
                 p = q;
@@ -159,10 +162,9 @@ public class SkipList<K extends Comparable<K>, V> {
         if (null == q || q.compareKey(key) > 0) {
             return null;
         }
-
-        V value = q.value;
-        return value;
+        return q;
     }
+
 
     /**
      * 打印生成的跳表
