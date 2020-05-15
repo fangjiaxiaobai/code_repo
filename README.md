@@ -1,5 +1,6 @@
-# data_structures_and_algorithms
-数据结构与算法的学习与实现，以及例题分享
+# Code Repository
+
+日常学习的代码，知识点, 数据结构与算法的学习与实现，以及例题分享
 
 本项目会持续更新,欢迎各位大侠不吝`star`.
 
@@ -18,3 +19,14 @@
 最新动态欢迎关注公众号: 【方家小白】
 
 ![qrcode](./asset/images/qrcode.jpg)
+
+
+### 目录
+
+#### 1.数据结构
+
+[数据结构目录]()
+
+#### 2.`Java`相关
+
+[Java 相关知识点目录](./02_java/README.md)
