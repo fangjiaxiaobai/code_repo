@@ -1,2 +1,2 @@
-[bitMap.java](./bitmap/bitMap.java)
+[BitMap.java](./bitmap/BitMap.java)
 
