@@ -4,6 +4,7 @@
 
 * [x] [返回首页](./../README.md) 
 * [x] [跳表](./skiplist/README.md)
+* [x] [位图](./bitmap/README.md)
 
 ### 最新动态
 
